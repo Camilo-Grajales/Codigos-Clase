@@ -1,0 +1,45 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package prfilewite;
+
+import java.io.FileWriter;
+import java.io.IOException;
+/**
+ *
+ * @author Irvin-Laptop
+ */
+public class Prfilewite {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        FileWriter archivo_fw = null;
+        String arr[]={"CARRANZA JUAN","MEJIA SANCHEZ","GRAJALES CAMILO","ALBAN JAIME","FIGUEROA JONATHAN"};
+        try
+        {    
+        archivo_fw=new FileWriter ("A:/nombres.txt");
+        for(String temp:arr)
+        {
+            archivo_fw.write(temp+",");
+            
+            
+        }
+            archivo_fw.close();
+       
+        
+        }catch (IOException e)
+            
+        {
+            System.out.println("Error: "+e.getMessage ());
+            
+        }
+        
+              System.out.println("Operacion sin excepciones");
+    }
+    
+}
