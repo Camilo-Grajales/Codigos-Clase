@@ -22,7 +22,7 @@ public class Prfilewite {
         String arr[]={"CARRANZA JUAN","MEJIA SANCHEZ","GRAJALES CAMILO","ALBAN JAIME","FIGUEROA JONATHAN"};
         try
         {    
-        archivo_fw=new FileWriter ("A:/nombres.txt");
+        archivo_fw=new FileWriter ("A:/integrantes.txt");
         for(String temp:arr)
         {
             archivo_fw.write(temp+",");
