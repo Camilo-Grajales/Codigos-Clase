@@ -1,0 +1,36 @@
+package control.de.usuario;
+import javax.swing.JOptionPane;
+/**
+ *
+ * @author Irvin-Laptop
+ */
+public class sc {
+    Usuario login = new Usuario();
+    String res;
+    public void validarUsuario (String usuarios [], String User, String password, int intentos ){
+        boolean encontrado = false;
+        
+        for (int i = 0; i < usuarios.length; i++){
+            if((usuarios[i].equalsIgnoreCase(User) && usuarios [i+1].equals(password))){
+                res = "BIENVENIDO " + User;
+                encontrado = true;
+                JOptionPane.showMessageDialog (null, res, "Inicio de Sesión", JOptionPane.INFORMATION_MESSAGE);
+                intentos = 0;
+                login.setIntentos(intentos);
+                new Bienvenido().setVisible(true);
+         
+                break;
+            }
+        }
+        if (encontrado = false){
+            res = "clave y/o usuario erroneos van" + intentos + "intentos fallidos";
+            JOptionPane.showMessageDialog(null, res, "Inicio de sesión", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        if (intentos > 2){
+            JOptionPane.showMessageDialog(null, "3 intentos erroneos, se bloquea", "Inicio de Sesión", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
+    }
+    
+}
