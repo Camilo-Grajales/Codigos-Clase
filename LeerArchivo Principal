@@ -1,0 +1,9 @@
+import javax.swing.JFrame;
+/***/
+
+public class PruebaLeerArchivoServidor {
+    public static void main( String args[] ){
+        LeerArchivoServidor aplicacion = new LeerArchivoServidor();
+        aplicacion.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE );
+    }
+}
