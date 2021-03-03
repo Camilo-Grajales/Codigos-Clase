@@ -1,0 +1,108 @@
+package com.example.esquemadeapp;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText txtNombre, txtCorreo, txtPassword, txtTelefono, txtCodigo;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        initUI();
+
+    }
+    public void initUI(){
+        txtNombre = findViewById(R.id.txtnombre);
+        txtCorreo = findViewById(R.id.txtcorreo);
+        txtPassword = findViewById(R.id.txtpass);
+        txtTelefono = findViewById(R.id.txttelefono);
+        txtCodigo = findViewById(R.id.txtcodigo);
+    }
+    public void limpiar(){
+        txtCodigo.setText("");
+        txtNombre.setText("");
+        txtCorreo.setText("");
+        txtPassword.setText("");
+        txtTelefono.setText("");
+    }
+    public void Registrar(View view){
+        AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "administracion", null, 1);
+            SQLiteDatabase BaseDeDatos = admin.getWritableDatabase(); //abrir base de datos en modo lectura y escritura
+            String codigo = txtCodigo.getText().toString();
+            String nombre = txtNombre.getText().toString();
+            String correo = txtCorreo.getText().toString();
+            String passw = txtPassword.getText().toString();
+            String telefono = txtTelefono.getText().toString();
+            if(!codigo.isEmpty() && !nombre.isEmpty() && !correo.isEmpty() && !passw.isEmpty() && !telefono.isEmpty()){
+                ContentValues registro = new ContentValues();
+                registro.put("codigo",codigo);
+                registro.put("nombre", nombre);
+                registro.put("correo", correo);
+                registro.put("passw", passw);
+                registro.put("telefono", telefono);
+                BaseDeDatos.insert("personas",null, registro); //insertar datos en la tabla
+                BaseDeDatos.close(); //cerrar base de datos
+                limpiar();
+                Toast.makeText(this, "REGISTRO EXITOSO", Toast.LENGTH_SHORT).show();
+            }else { // si no ha llenado todos los campos
+                Toast.makeText(this, "LLENAR TODOS LOS CAMPOS", Toast.LENGTH_SHORT).show();
+            }
+    }
+        public void buscar (View view){
+            AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(this, "administracion", null, 1);
+            SQLiteDatabase BaseDeDatos = admin.getWritableDatabase(); //abrir base de datos en modo lectura y escritura
+            String codigo = txtCodigo.getText().toString();
+            if (!codigo.isEmpty()){
+                 Cursor fila = BaseDeDatos.rawQuery
+                        ("select nombre, correo, passw, telefono from personas where codigo =" + codigo, null);
+                if(fila.moveToFirst()){
+                    txtNombre.setText(fila.getString(0));
+                    txtCorreo.setText(fila.getString(1));
+                    txtPassword.setText(fila.getString(2));
+                    txtTelefono.setText(fila.getString(3));
+                    BaseDeDatos.close(); //cerrar base de datos
+                } else { //si no existe usuario con ese codigo
+                    Toast.makeText(this, "NO EXISTE DATOS CON ESE CODIGO", Toast.LENGTH_SHORT).show();
+                    BaseDeDatos.close(); //cerrar base de datos
+                }
+            }else{ // si no introduce el codigo
+                Toast.makeText(this, "DEBES INTRODUCIR EL CODIGO", Toast.LENGTH_SHORT).show();
+            }
+        }
+}
+
+//clase AdminSQLiteOpenHelper
+
+package com.example.esquemadeapp;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import androidx.annotation.Nullable;
+
+
+public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
+    public AdminSQLiteOpenHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+        super(context, name, factory, version);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase BaseDeDatos) {
+        BaseDeDatos.execSQL("create table personas(codigo int PRIMARY KEY, nombre TEXT, correo TEXT, passw TEXT, telefono TEXT)");
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    }
+}
